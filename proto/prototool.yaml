@@ -1,0 +1,28 @@
+protoc:
+  version: 3.7.1
+  includes:
+    - ../third_party/proto
+
+generate:
+  go_options:
+    import_path: vterdunov/janna-proto
+  plugins:
+    - name: go
+      type: go
+      flags: plugins=grpc
+      output: ../gen/go
+
+    - name: grpc-gateway
+      type: go
+      output: ../gen/go
+
+    - name: swagger
+      type: go
+      output: ../gen/swagger
+
+lint:
+  group: uber2
+  rules:
+    remove:
+      - NAMES_NO_UUID
+      - NAMES_NO_DATA

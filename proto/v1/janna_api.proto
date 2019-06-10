@@ -1,0 +1,145 @@
+syntax = "proto3";
+
+package api.v1;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option go_package = "apiv1";
+option csharp_namespace = "Api.V1";
+option java_multiple_files = true;
+option java_outer_classname = "JannaApiProto";
+option java_package = "com.api.v1";
+option objc_class_prefix = "AXX";
+option php_namespace = "Api\\V1";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+	info: {
+		title: "Janna service";
+		version: "1.0";
+		contact: {
+			name: "Vyacheslav Terdunov";
+			url: "https://github.com/vterdunov/janna";
+    };
+  };
+	schemes: HTTP;
+	consumes: "application/json";
+	produces: "application/json";
+	responses: {
+		key: "404";
+		value: {
+			description: "Returned when the resource does not exist.";
+			schema: {
+				json_schema: {
+					type: STRING;
+				}
+			}
+		}
+	}
+};
+
+// JannaAPI handles intercation with Janna service.
+service JannaAPI {
+  // Get the application build information.
+  rpc AppInfo(AppInfoRequest) returns (AppInfoResponse) {
+    option (google.api.http) = {
+      get: "/v1/info"
+    };
+  }
+
+	// Get a Virtual Machine information by its UUID.
+	rpc VMInfo(VMInfoRequest) returns (VMInfoResponse) {
+		option (google.api.http) = {
+			get: "/v1/vms/{vm_uuid}"
+		};
+	}
+
+	// Deploy Virtual Machine.
+	rpc VMDeploy(VMDeployRequest) returns (VMDeployResponse) {
+		option (google.api.http) = {
+			post: "/v1/vms"
+			body: "*"
+		};
+	}
+}
+
+message AppInfoRequest {}
+
+message AppInfoResponse {
+  string commit = 1;
+  string build_time = 2;
+}
+
+message VMInfoRequest{
+	string vm_uuid = 1;
+	string datacenter = 2;
+}
+
+message VMInfoResponse {
+	string name = 1;
+	string uuid = 2;
+	string guest_id = 3;
+	string annotation = 4;
+	string power_state = 5;
+	uint32 num_cpu = 6;
+	uint32 num_ethernet_cards = 7;
+	uint32 num_virtual_disks = 8;
+	bool template = 9;
+
+	repeated string ip_addresses = 20;
+}
+
+message VMDeployRequest {
+	string name = 1;
+	string ova_url = 2;
+	string datacenter = 3;
+	string folder = 4;
+	string annotation = 5;
+
+	// "OVF network": "ESXi network"
+	map<string, string> networks = 10;
+
+	// Describe a datastore.
+	message Datastore {
+		// Storage type. If 'cluster' type was chosen then Janna try to get DRS recommendation to choose proper 'datastore'.
+		enum Type {
+			// zero value
+			TYPE_INVALID = 0;
+
+			// cluster. DRS will be applied.
+			TYPE_CLUSTER = 1;
+
+			// single datastore.
+			TYPE_DATASTORE = 2;
+		}
+		Type type = 1;
+		repeated string names = 2;
+	}
+	Datastore datastores = 11;
+
+	// Describes a computer resource. Such as single host or cluster.
+	message ComputerResources {
+		// Computer Resource Type.
+		enum Type {
+			// zero value
+			TYPE_INVALID = 0;
+
+			// host
+			TYPE_HOST = 1;
+
+			// cluster
+			TYPE_CLUSTER = 2;
+
+			// resource pool
+			TYPE_RP = 3;
+		}
+
+		Type type = 1;
+		string path = 2;
+	}
+	ComputerResources computer_resources = 12;
+}
+
+message VMDeployResponse {
+	string task_id = 1;
+}

@@ -1,0 +1,259 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Janna service",
+    "version": "1.0",
+    "contact": {
+      "name": "Vyacheslav Terdunov",
+      "url": "https://github.com/vterdunov/janna"
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/info": {
+      "get": {
+        "summary": "Get the application build information.",
+        "operationId": "AppInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AppInfoResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "tags": [
+          "JannaAPI"
+        ]
+      }
+    },
+    "/v1/vms": {
+      "post": {
+        "summary": "Deploy Virtual Machine.",
+        "operationId": "VMDeploy",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1VMDeployResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1VMDeployRequest"
+            }
+          }
+        ],
+        "tags": [
+          "JannaAPI"
+        ]
+      }
+    },
+    "/v1/vms/{vm_uuid}": {
+      "get": {
+        "summary": "Get a Virtual Machine information by its UUID.",
+        "operationId": "VMInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1VMInfoResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vm_uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "datacenter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "JannaAPI"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "VMDeployRequestComputerResources": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/VMDeployRequestComputerResourcesType"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "description": "Describes a computer resource. Such as single host or cluster."
+    },
+    "VMDeployRequestComputerResourcesType": {
+      "type": "string",
+      "enum": [
+        "TYPE_INVALID",
+        "TYPE_HOST",
+        "TYPE_CLUSTER",
+        "TYPE_RP"
+      ],
+      "default": "TYPE_INVALID",
+      "description": "Computer Resource Type.\n\n - TYPE_INVALID: zero value\n - TYPE_HOST: host\n - TYPE_CLUSTER: cluster\n - TYPE_RP: resource pool"
+    },
+    "VMDeployRequestDatastore": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/VMDeployRequestDatastoreType"
+        },
+        "names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Describe a datastore."
+    },
+    "VMDeployRequestDatastoreType": {
+      "type": "string",
+      "enum": [
+        "TYPE_INVALID",
+        "TYPE_CLUSTER",
+        "TYPE_DATASTORE"
+      ],
+      "default": "TYPE_INVALID",
+      "description": "Storage type. If 'cluster' type was chosen then Janna try to get DRS recommendation to choose proper 'datastore'.\n\n - TYPE_INVALID: zero value\n - TYPE_CLUSTER: cluster. DRS will be applied.\n - TYPE_DATASTORE: single datastore."
+    },
+    "v1AppInfoResponse": {
+      "type": "object",
+      "properties": {
+        "commit": {
+          "type": "string"
+        },
+        "build_time": {
+          "type": "string"
+        }
+      }
+    },
+    "v1VMDeployRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ova_url": {
+          "type": "string"
+        },
+        "datacenter": {
+          "type": "string"
+        },
+        "folder": {
+          "type": "string"
+        },
+        "annotation": {
+          "type": "string"
+        },
+        "networks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "\"OVF network\": \"ESXi network\""
+        },
+        "datastores": {
+          "$ref": "#/definitions/VMDeployRequestDatastore"
+        },
+        "computer_resources": {
+          "$ref": "#/definitions/VMDeployRequestComputerResources"
+        }
+      }
+    },
+    "v1VMDeployResponse": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "type": "string"
+        }
+      }
+    },
+    "v1VMInfoResponse": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string"
+        },
+        "guest_id": {
+          "type": "string"
+        },
+        "annotation": {
+          "type": "string"
+        },
+        "power_state": {
+          "type": "string"
+        },
+        "num_cpu": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "num_ethernet_cards": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "num_virtual_disks": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "template": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "ip_addresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
