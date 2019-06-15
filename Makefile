@@ -1,4 +1,4 @@
-PROTOTOOL_IMAGE = uber/prototool:1.6.0
+PROTOTOOL_IMAGE = uber/prototool:1.8.0
 
 .PHONY: help
 help: ## Display this help message

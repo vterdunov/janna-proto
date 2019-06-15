@@ -61,6 +61,14 @@ service JannaAPI {
 			body: "*"
 		};
 	}
+
+	// Change Virtual Machine power state.
+	rpc VMPower(VMPowerRequest) returns (VMPowerResponse) {
+		option (google.api.http) = {
+			patch: "/v1/vms/{vm_uuid}/power"
+			body: "vm_power_request_body"
+		};
+	}
 }
 
 message AppInfoRequest {}
@@ -143,3 +151,16 @@ message VMDeployRequest {
 message VMDeployResponse {
 	string task_id = 1;
 }
+
+message VMPowerRequest {
+	// VMPowerRequestBody is a body of the request.
+	message VMPowerRequestBody {
+		string state = 1;
+		string datacenter = 2;
+	}
+
+	string vm_uuid = 1;
+	VMPowerRequestBody vm_power_request_body = 2;
+}
+
+message VMPowerResponse {}
