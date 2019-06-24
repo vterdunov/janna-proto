@@ -173,10 +173,9 @@ message VMPowerRequest {
 message VMPowerResponse {}
 
 message VMListRequest {
-	string vm_uuid = 1;
-	string datacenter = 2;
-	string folder = 3;
-	string resource_pool = 4;
+	string datacenter = 1;
+	string folder = 2;
+	string resource_pool = 3;
 }
 
 message VMListResponse {

@@ -61,12 +61,6 @@
         },
         "parameters": [
           {
-            "name": "vm_uuid",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "datacenter",
             "in": "query",
             "required": false,
