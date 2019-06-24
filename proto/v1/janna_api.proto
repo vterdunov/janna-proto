@@ -47,10 +47,10 @@ service JannaAPI {
     };
   }
 
-	// Get a Virtual Machine information by its UUID.
-	rpc VMInfo(VMInfoRequest) returns (VMInfoResponse) {
+	// Virtual Machines list.
+	rpc VMList(VMListRequest) returns (VMListResponse) {
 		option (google.api.http) = {
-			get: "/v1/vms/{vm_uuid}"
+			get: "/v1/vms"
 		};
 	}
 
@@ -59,6 +59,13 @@ service JannaAPI {
 		option (google.api.http) = {
 			post: "/v1/vms"
 			body: "*"
+		};
+	}
+
+	// Get a Virtual Machine information by its UUID.
+	rpc VMInfo(VMInfoRequest) returns (VMInfoResponse) {
+		option (google.api.http) = {
+			get: "/v1/vms/{vm_uuid}"
 		};
 	}
 
@@ -164,3 +171,20 @@ message VMPowerRequest {
 }
 
 message VMPowerResponse {}
+
+message VMListRequest {
+	string vm_uuid = 1;
+	string datacenter = 2;
+	string folder = 3;
+	string resource_pool = 4;
+}
+
+message VMListResponse {
+	// VMMap is a mapping between Virtual Machine name and its UUID.
+	message VMMap {
+		string name = 1;
+		string uuid = 2;
+	}
+
+	repeated VMMap virtual_machines = 10;
+}
