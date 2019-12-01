@@ -241,18 +241,6 @@
       "default": "TYPE_INVALID",
       "description": "Storage type. If 'cluster' type was chosen then Janna try to get DRS recommendation to choose proper 'datastore'.\n\n - TYPE_INVALID: zero value\n - TYPE_CLUSTER: cluster. DRS will be applied.\n - TYPE_DATASTORE: single datastore."
     },
-    "VMListResponseVMMap": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "uuid": {
-          "type": "string"
-        }
-      },
-      "description": "VMMap is a mapping between Virtual Machine name and its UUID."
-    },
     "VMPowerRequestVMPowerRequestBody": {
       "type": "object",
       "properties": {
@@ -328,11 +316,8 @@
     "v1VMListResponse": {
       "type": "object",
       "properties": {
-        "virtual_machines": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/VMListResponseVMMap"
-          }
+        "task_id": {
+          "type": "string"
         }
       }
     },

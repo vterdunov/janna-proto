@@ -169,11 +169,5 @@ message VMListRequest {
 }
 
 message VMListResponse {
-	// VMMap is a mapping between Virtual Machine name and its UUID.
-	message VMMap {
-		string name = 1;
-		string uuid = 2;
-	}
-
-	repeated VMMap virtual_machines = 10;
+	string task_id = 1;
 }
