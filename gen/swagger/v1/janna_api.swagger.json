@@ -320,42 +320,8 @@
     "v1VMInfoResponse": {
       "type": "object",
       "properties": {
-        "name": {
+        "task_id": {
           "type": "string"
-        },
-        "uuid": {
-          "type": "string"
-        },
-        "guest_id": {
-          "type": "string"
-        },
-        "annotation": {
-          "type": "string"
-        },
-        "power_state": {
-          "type": "string"
-        },
-        "num_cpu": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "num_ethernet_cards": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "num_virtual_disks": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "template": {
-          "type": "boolean",
-          "format": "boolean"
-        },
-        "ip_addresses": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         }
       }
     },

@@ -91,17 +91,7 @@ message VMInfoRequest{
 }
 
 message VMInfoResponse {
-	string name = 1;
-	string uuid = 2;
-	string guest_id = 3;
-	string annotation = 4;
-	string power_state = 5;
-	uint32 num_cpu = 6;
-	uint32 num_ethernet_cards = 7;
-	uint32 num_virtual_disks = 8;
-	bool template = 9;
-
-	repeated string ip_addresses = 20;
+	string task_id = 1;
 }
 
 message VMDeployRequest {
