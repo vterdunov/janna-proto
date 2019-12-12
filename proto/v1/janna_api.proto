@@ -3,6 +3,7 @@ syntax = "proto3";
 package api.v1;
 
 import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
 import "protoc-gen-swagger/options/annotations.proto";
 
 option go_package = "apiv1";
@@ -46,6 +47,13 @@ service JannaAPI {
       get: "/v1/info"
     };
   }
+
+	// Get a task status.
+	rpc TaskStatus(TaskStatusRequest) returns (TaskStatusResponse) {
+		option (google.api.http) = {
+			get: "/v1/tasks/{task_id}"
+		};
+	}
 
 	// Virtual Machines list.
 	rpc VMList(VMListRequest) returns (VMListResponse) {
@@ -160,7 +168,9 @@ message VMPowerRequest {
 	VMPowerRequestBody vm_power_request_body = 2;
 }
 
-message VMPowerResponse {}
+message VMPowerResponse {
+	string task_id = 1;
+}
 
 message VMListRequest {
 	string datacenter = 1;
@@ -170,4 +180,14 @@ message VMListRequest {
 
 message VMListResponse {
 	string task_id = 1;
+}
+
+message TaskStatusRequest {
+	string task_id = 1;
+}
+
+message TaskStatusResponse {
+	string status = 1;
+	string message = 2;
+	google.protobuf.Struct result = 3;
 }

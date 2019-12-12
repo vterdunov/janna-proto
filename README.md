@@ -8,6 +8,8 @@ This repo contains protocol buffer service definitions and generated interfaces 
 - commit new changes `git add . && git commit -m '<Commit description>'`
 - push the changes `git push`
 
+Please remember about backward compatibility. Heres is a [article](https://developers.google.com/protocol-buffers/docs/proto3#updating)
+
 ## Repository structure
 
 ### `/gen`
