@@ -72,7 +72,7 @@
         ]
       }
     },
-    "/v1/vms": {
+    "/v1/vcenter/vms": {
       "get": {
         "summary": "Virtual Machines list.",
         "operationId": "VMList",
@@ -146,7 +146,7 @@
         ]
       }
     },
-    "/v1/vms/{vm_uuid}": {
+    "/v1/vcenter/vms/{vm_uuid}": {
       "get": {
         "summary": "Get a Virtual Machine information by its UUID.",
         "operationId": "VMInfo",
@@ -183,7 +183,7 @@
         ]
       }
     },
-    "/v1/vms/{vm_uuid}/power": {
+    "/v1/vcenter/vms/{vm_uuid}/power": {
       "patch": {
         "summary": "Change Virtual Machine power state.",
         "operationId": "VMPower",
@@ -272,6 +272,28 @@
       "default": "TYPE_INVALID",
       "description": "Storage type. If 'cluster' type was chosen then Janna try to get DRS recommendation to choose proper 'datastore'.\n\n - TYPE_INVALID: zero value\n - TYPE_CLUSTER: cluster. DRS will be applied.\n - TYPE_DATASTORE: single datastore."
     },
+    "VMInfoResponseGuest": {
+      "type": "object",
+      "properties": {
+        "tools_status": {
+          "type": "string"
+        }
+      },
+      "description": "Guest."
+    },
+    "VMInfoResponseRuntime": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string"
+        }
+      },
+      "description": "Runtime."
+    },
+    "VMInfoResponseSummary": {
+      "type": "object",
+      "description": "Summary."
+    },
     "VMPowerRequestVMPowerRequestBody": {
       "type": "object",
       "properties": {
@@ -295,20 +317,55 @@
         }
       }
     },
+    "v1IPAddresses": {
+      "type": "object",
+      "properties": {
+        "ip_addresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "IPAddresses a list of Virtual Machine IP addresses."
+    },
+    "v1PowerState": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/v1PowerStateType"
+        }
+      },
+      "description": "PowerState describes a Virtual Machine power state."
+    },
+    "v1PowerStateType": {
+      "type": "string",
+      "enum": [
+        "TYPE_INVALID",
+        "TYPE_POWERED_ON",
+        "TYPE_POWERED_OFF",
+        "TYPE_SUSPENDED"
+      ],
+      "default": "TYPE_INVALID",
+      "description": "Storage type. If 'cluster' type was chosen then Janna try to get DRS recommendation to choose proper 'datastore'.\n\n - TYPE_INVALID: zero value\n - TYPE_POWERED_ON: powered on\n - TYPE_POWERED_OFF: powered off\n - TYPE_SUSPENDED: suspended"
+    },
     "v1TaskStatusResponse": {
       "type": "object",
       "properties": {
-        "status": {
+        "state": {
           "type": "string"
         },
-        "message": {
+        "error": {
           "type": "string"
         },
-        "test1": {
-          "type": "string"
+        "ip_addresses": {
+          "$ref": "#/definitions/v1IPAddresses"
         },
-        "test2": {
-          "type": "string"
+        "vm_short_info": {
+          "$ref": "#/definitions/v1VMShortInfo"
+        },
+        "vm_info": {
+          "$ref": "#/definitions/v1VMInfoResponse"
         }
       }
     },
@@ -356,10 +413,41 @@
     "v1VMInfoResponse": {
       "type": "object",
       "properties": {
-        "task_id": {
+        "name": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "#/definitions/v1VMInfoResponseConfig"
+        },
+        "runtime": {
+          "$ref": "#/definitions/VMInfoResponseRuntime"
+        },
+        "guest": {
+          "$ref": "#/definitions/VMInfoResponseGuest"
+        },
+        "summary": {
+          "$ref": "#/definitions/VMInfoResponseSummary"
+        },
+        "datastore": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "guest_heartbeat_status": {
           "type": "string"
         }
-      }
+      },
+      "description": "VMInfoResponse keeps data about a Virtual Machine."
+    },
+    "v1VMInfoResponseConfig": {
+      "type": "object",
+      "properties": {
+        "change_version": {
+          "type": "string"
+        }
+      },
+      "description": "Config."
     },
     "v1VMListResponse": {
       "type": "object",
@@ -376,6 +464,29 @@
           "type": "string"
         }
       }
+    },
+    "v1VMShortInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "power_state": {
+          "$ref": "#/definitions/v1PowerState"
+        },
+        "ip_addresses": {
+          "$ref": "#/definitions/v1IPAddresses"
+        },
+        "cpu_count": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "memory_size_mib": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "description": "VMShortInfo keeps commonly used information about a Virtual Machine."
     }
   }
 }

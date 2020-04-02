@@ -334,13 +334,13 @@ var (
 
 	pattern_JannaAPI_TaskStatus_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "tasks", "task_id"}, ""))
 
-	pattern_JannaAPI_VMList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "vms"}, ""))
+	pattern_JannaAPI_VMList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "vcenter", "vms"}, ""))
 
-	pattern_JannaAPI_VMDeploy_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "vms"}, ""))
+	pattern_JannaAPI_VMDeploy_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "vcenter", "vms"}, ""))
 
-	pattern_JannaAPI_VMInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "vms", "vm_uuid"}, ""))
+	pattern_JannaAPI_VMInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "vcenter", "vms", "vm_uuid"}, ""))
 
-	pattern_JannaAPI_VMPower_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "vms", "vm_uuid", "power"}, ""))
+	pattern_JannaAPI_VMPower_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"v1", "vcenter", "vms", "vm_uuid", "power"}, ""))
 )
 
 var (

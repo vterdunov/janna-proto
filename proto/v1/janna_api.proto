@@ -57,14 +57,14 @@ service JannaAPI {
 	// Virtual Machines list.
 	rpc VMList(VMListRequest) returns (VMListResponse) {
 		option (google.api.http) = {
-			get: "/v1/vms"
+			get: "/v1/vcenter/vms"
 		};
 	}
 
 	// Deploy Virtual Machine.
 	rpc VMDeploy(VMDeployRequest) returns (VMDeployResponse) {
 		option (google.api.http) = {
-			post: "/v1/vms"
+			post: "/v1/vcenter/vms"
 			body: "*"
 		};
 	}
@@ -72,14 +72,14 @@ service JannaAPI {
 	// Get a Virtual Machine information by its UUID.
 	rpc VMInfo(VMInfoRequest) returns (VMInfoResponse) {
 		option (google.api.http) = {
-			get: "/v1/vms/{vm_uuid}"
+			get: "/v1/vcenter/vms/{vm_uuid}"
 		};
 	}
 
 	// Change Virtual Machine power state.
 	rpc VMPower(VMPowerRequest) returns (VMPowerResponse) {
 		option (google.api.http) = {
-			patch: "/v1/vms/{vm_uuid}/power"
+			patch: "/v1/vcenter/vms/{vm_uuid}/power"
 			body: "vm_power_request_body"
 		};
 	}
@@ -95,10 +95,6 @@ message AppInfoResponse {
 message VMInfoRequest{
 	string vm_uuid = 1;
 	string datacenter = 2;
-}
-
-message VMInfoResponse {
-	string task_id = 1;
 }
 
 message VMDeployRequest {
@@ -186,10 +182,104 @@ message TaskStatusRequest {
 }
 
 message TaskStatusResponse {
-	string status = 1;
-	string message = 2;
+	string state = 1;
+
 	oneof result {
-		string test1 = 10;
-		string test2 = 11;
+		string error = 10;
+		IPAddresses ip_addresses = 11;
+		VMShortInfo vm_short_info = 12;
+		VMInfoResponse vm_info = 13;
 	}
+}
+
+// IPAddresses a list of Virtual Machine IP addresses.
+message IPAddresses {
+	repeated string ip_addresses = 1;
+}
+
+// PowerState describes a Virtual Machine power state.
+message PowerState {
+	// Storage type. If 'cluster' type was chosen then Janna try to get DRS recommendation to choose proper 'datastore'.
+	enum Type {
+		// zero value
+		TYPE_INVALID = 0;
+
+		// powered on
+		TYPE_POWERED_ON = 1;
+
+		// powered off
+		TYPE_POWERED_OFF = 2;
+
+		// suspended
+		TYPE_SUSPENDED = 3;
+	}
+	Type type = 1;
+}
+
+// VMInfoResponse keeps data about a Virtual Machine.
+message VMInfoResponse {
+
+	// Config.
+	message Config {
+		string change_version = 1;
+	}
+
+  // Runtime.
+	message Runtime {
+		string host = 2;
+	}
+
+  // Guest.
+	message Guest {
+		string tools_status = 1;
+	}
+
+  // Summary.
+	message Summary {
+		// Storage.
+		message Storage {
+			int64 committed = 1;
+			int64 uncommitted = 2;
+			int64 unshared = 3;
+		}
+
+		// Config.
+		message Config {
+			string name = 1;
+			bool template = 2;
+			string vm_path_name = 3;
+			int32 mwmory_size_mb = 4;
+			int32 cpu_reservation = 5;
+			int32 memory_reservation = 6;
+			int32 num_cpu = 7;
+			int32 num_ethernet_cards = 8;
+			int32 num_virtual_disks = 9;
+			string uuid = 10;
+			string instance_uuid = 11;
+			string guest_id = 12;
+			string guest_full_name = 13;
+			string annotation = 14;
+
+			bool install_boot_required = 16;
+		}
+	}
+
+	string name = 1;
+	Config config = 2;
+	Runtime runtime = 3;
+	Guest guest = 4;
+	Summary summary = 5;
+
+	string datastore = 16;
+	string network = 17;
+	string guest_heartbeat_status = 18;
+}
+
+// VMShortInfo keeps commonly used information about a Virtual Machine.
+message VMShortInfo {
+	string name = 1;
+	PowerState power_state = 2;
+	IPAddresses ip_addresses = 3;
+	int32 cpu_count = 4;
+	int32 memory_size_mib = 5;
 }
