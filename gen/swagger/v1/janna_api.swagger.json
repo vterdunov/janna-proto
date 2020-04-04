@@ -272,7 +272,7 @@
       "default": "TYPE_INVALID",
       "description": "Storage type. If 'cluster' type was chosen then Janna try to get DRS recommendation to choose proper 'datastore'.\n\n - TYPE_INVALID: zero value\n - TYPE_CLUSTER: cluster. DRS will be applied.\n - TYPE_DATASTORE: single datastore."
     },
-    "VMInfoResponseGuest": {
+    "VMInfoGuest": {
       "type": "object",
       "properties": {
         "tools_status": {
@@ -281,7 +281,7 @@
       },
       "description": "Guest."
     },
-    "VMInfoResponseRuntime": {
+    "VMInfoRuntime": {
       "type": "object",
       "properties": {
         "host": {
@@ -290,7 +290,7 @@
       },
       "description": "Runtime."
     },
-    "VMInfoResponseSummary": {
+    "VMInfoSummary": {
       "type": "object",
       "description": "Summary."
     },
@@ -365,9 +365,10 @@
           "$ref": "#/definitions/v1VMShortInfo"
         },
         "vm_info": {
-          "$ref": "#/definitions/v1VMInfoResponse"
+          "$ref": "#/definitions/v1VMInfo"
         }
-      }
+      },
+      "description": "TaskStatusResponse returns on of the following structured responses."
     },
     "v1VMDeployRequest": {
       "type": "object",
@@ -410,23 +411,23 @@
         }
       }
     },
-    "v1VMInfoResponse": {
+    "v1VMInfo": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
         },
         "config": {
-          "$ref": "#/definitions/v1VMInfoResponseConfig"
+          "$ref": "#/definitions/v1VMInfoConfig"
         },
         "runtime": {
-          "$ref": "#/definitions/VMInfoResponseRuntime"
+          "$ref": "#/definitions/VMInfoRuntime"
         },
         "guest": {
-          "$ref": "#/definitions/VMInfoResponseGuest"
+          "$ref": "#/definitions/VMInfoGuest"
         },
         "summary": {
-          "$ref": "#/definitions/VMInfoResponseSummary"
+          "$ref": "#/definitions/VMInfoSummary"
         },
         "datastore": {
           "type": "string"
@@ -438,9 +439,9 @@
           "type": "string"
         }
       },
-      "description": "VMInfoResponse keeps data about a Virtual Machine."
+      "description": "VMInfo keeps data about a Virtual Machine."
     },
-    "v1VMInfoResponseConfig": {
+    "v1VMInfoConfig": {
       "type": "object",
       "properties": {
         "change_version": {
@@ -448,6 +449,14 @@
         }
       },
       "description": "Config."
+    },
+    "v1VMInfoResponse": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "type": "string"
+        }
+      }
     },
     "v1VMListResponse": {
       "type": "object",

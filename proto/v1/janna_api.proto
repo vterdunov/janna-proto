@@ -97,6 +97,10 @@ message VMInfoRequest{
 	string datacenter = 2;
 }
 
+message VMInfoResponse {
+	string task_id = 1;
+}
+
 message VMDeployRequest {
 	string name = 1;
 	string ova_url = 2;
@@ -181,6 +185,7 @@ message TaskStatusRequest {
 	string task_id = 1;
 }
 
+// TaskStatusResponse returns on of the following structured responses.
 message TaskStatusResponse {
 	string state = 1;
 
@@ -188,7 +193,7 @@ message TaskStatusResponse {
 		string error = 10;
 		IPAddresses ip_addresses = 11;
 		VMShortInfo vm_short_info = 12;
-		VMInfoResponse vm_info = 13;
+		VMInfo vm_info = 13;
 	}
 }
 
@@ -216,8 +221,8 @@ message PowerState {
 	Type type = 1;
 }
 
-// VMInfoResponse keeps data about a Virtual Machine.
-message VMInfoResponse {
+// VMInfo keeps data about a Virtual Machine.
+message VMInfo {
 
 	// Config.
 	message Config {
