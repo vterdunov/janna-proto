@@ -4,7 +4,7 @@ This repo contains protocol buffer service definitions and generated interfaces 
 
 ## Workflow
 - make changes in proto files
-- generate code `make proto`. Need Docker installed.
+- generate code `make generate`. Need Docker installed.
 - commit new changes `git add . && git commit -m '<Commit description>'`
 - push the changes `git push`
 
