@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	blobFileName string = "../gen/go/v1/blob.go"
+	blobFileName string = "../gen/box/go/blob.go"
 	embedFolder  string = "../gen/swagger/v1"
 )
 
